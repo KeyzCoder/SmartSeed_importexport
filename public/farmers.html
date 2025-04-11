@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmers - Smart Seed</title>
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+    
+    <style>
+        .highlighted {
+            background-color: #f0f8ff;
+        }
+    </style>
+</head>
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background-color: #3cb043;">
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                <img src="/img/smartseed_logo.jpg" alt="Smart Seed Logo">
+
+
+                <div class="sidebar-brand-text mx-3">Smart Seed</div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item">
+                <a class="nav-link" href="dashboard.html">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Farmers -->
+            <li class="nav-item active">
+                <a class="nav-link" href="farmers.html">
+                    <i class="fas fa-fw fa-user"></i>
+                    <span>Farmers</span>
+                </a>
+            </li>
+
+            <!-- Nav Item - Info -->
+            <li class="nav-item">
+                <a class="nav-link" href="info.html">
+                    <i class="fas fa-fw fa-info-circle"></i>
+                    <span>Info</span>
+                </a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Sidebar Toggler -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                    <!-- Logout Button -->
+                    <button id="logout-btn" class="btn btn-danger ml-auto">Logout</button>
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    
+                    <!-- Add your dashboard content here -->
+
+                    
+                    <!-- Start of Table -->
+                    <div class="container-fluid">
+                        <!-- Page Heading -->
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <div>
+                                <h1 class="h3 mb-2 text-gray-800">Farmers</h1>
+                                <p class="mb-4">The table provides an overview of registered farmers, including their name, 
+                                    location, farm size, crop type, and contact details.</p>
+                            </div>
+                            <div>
+                                <button class="btn btn-success btn-sm mr-2" id="addFarmerBtn">
+                                    <i class="fas fa-plus"></i> Add Farmer
+                                </button>
+                                <button class="btn btn-primary btn-sm" id="printDataBtn">
+                                    <i class="fas fa-print"></i> Print Data
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- TABLE  -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Farmers Data</h6>
+                                <p>Select a farmer to view their crops data.</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Farmer ID</th>
+                                                <th>First Name</th>
+                                                <th>Last Name</th>
+                                                <th>Middle Name</th>
+                                                <th>Extension Name</th>
+                                                <th>Address</th>
+                                                <th>Contact Number</th>
+                                                <th>Crop Type</th>
+                                                <th>Farm Size (Hectares)</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- DataTables will populate this -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Farmer Crops and Details Section -->
+                        <div class="row">
+                            <!-- Crops for Farmer Section - Left Column -->
+                            <div class="col-lg-8">
+                                <div id="cropsForFarmer" class="card shadow mb-4" style="display: none;">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Crops for Farmer ID: <span id="cropsFarmerId"></span></h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Crop Type</th>
+                                                        <th>Bags Received</th>
+                                                        <th>Date Received</th>
+                                                        <th>Predicted Yield</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="cropsList">
+                                                    <!-- Crops data will be dynamically populated here -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <button class="btn btn-success btn-sm mt-3" id="addCropDataBtn">
+                                            <i class="fas fa-plus"></i> Add Crop Data
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Farmer Details Section - Right Column -->
+                            <div class="col-lg-4">
+                                <div id="farmerDetails" class="card shadow mb-4" style="display: none;">
+                                    <div class="card-header py-3">
+                                        <h6 class="m-0 font-weight-bold text-primary">Farmer Details</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>Farmer ID:</strong> <span id="farmerId"></span></p>
+                                        <p><strong>Name:</strong> <span id="farmerName"></span></p>
+                                        <p><strong>Address:</strong> <span id="farmerAddress"></span></p>
+                                        <p><strong>Contact Number:</strong> <span id="farmerContact"></span></p>
+                                        <p><strong>Crop Type:</strong> <span id="farmerCrop"></span></p>
+                                        <p><strong>Farm Size:</strong> <span id="farmerFarmSize"></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Farmer Crops Modal -->
+                        <!-- Crops for Farmer ID Section -->
+                        <div id="cropsForFarmer" class="card shadow mb-4" style="display: none;">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Crops for Farmer ID: <span id="cropsFarmerId"></span></h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Crop Type</th>
+                                                <th>Bags Received</th>
+                                                <th>Date Received</th>
+                                                <th>Predicted Yield</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="cropsList">
+                                            <!-- Crops data will be dynamically populated here -->
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <!--ADD CROP BUTTON-->
+                                <button class="btn btn-success btn-sm mt-3" id="addCropDataBtn">
+                                    <i class="fas fa-plus"></i> Add Crop Data
+                                </button>
+                            </div>
+                        </div>
+
+
+                        <!-- Farmer Details Modal -->
+                        <div id="farmerDetailsModal" class="modal" tabindex="-1" role="dialog" style="display: none;">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Farmer Details</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeFarmerDetailsModal()">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>   
+                                    </div>
+                                    <div class="modal-body">
+                                        <p><strong>Farmer ID:</strong> <span id="farmerId"></span></p>
+                                        <p><strong>Name:</strong> <span id="farmerName"></span></p>
+                                        <p><strong>Address:</strong> <span id="farmerAddress"></span></p>
+                                        <p><strong>Contact Number:</strong> <span id="farmerContact"></span></p>
+                                        <p><strong>Crop Type:</strong> <span id="farmerCrop"></span></p>
+                                        <p><strong>Farm Size:</strong> <span id="farmerFarmSize"></span></p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" onclick="closeFarmerDetailsModal()">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <!-- /.container-fluid -->
+
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scripts -->
+    <!-- Add Farmer Modal -->
+    <div class="modal fade" id="addFarmerModal" tabindex="-1" role="dialog" aria-labelledby="addFarmerModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addFarmerModalLabel">Add New Farmer</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addFarmerForm">
+                        <div class="form-group">
+                            <label for="firstName">First Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="lastName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="middleName">Middle Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="middleName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="extensionName">Extension Name</label>
+                            <input type="text" class="form-control" id="extensionName">
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Address <span class="text-danger">*</span></label>
+                            <select class="form-control" id="address" required>
+                                <option value="" disabled selected>Select Address</option>
+                                <option value="Alicia, Isabela">Alicia, Isabela</option>
+                                <option value="Angadanan, Isabela">Angadanan, Isabela</option>
+                                <option value="Benito Soliven, Isabela">Benito Soliven, Isabela</option>
+                                <option value="Burgos, Isabela">Burgos, Isabela</option>
+                                <option value="Cabagan, Isabela">Cabagan, Isabela</option>
+                                <option value="Cordon, Isabela">Cordon, Isabela</option>
+                                <option value="Dinapigue, Isabela">Dinapigue, Isabela</option>
+                                <option value="Divilacan, Isabela">Divilacan, Isabela</option>
+                                <option value="Echague, Isabela">Echague, Isabela</option>
+                                <option value="Gamu, Isabela">Gamu, Isabela</option>
+                                <option value="City of Ilagan, Isabela">City of Ilagan, Isabela</option>
+                                <option value="Jones, Isabela">Jones, Isabela</option>
+                                <option value="Maconacon, Isabela">Maconacon, Isabela</option>
+                                <option value="Naguilian, Isabela">Naguilian, Isabela</option>
+                                <option value="Palanan, Isabela">Palanan, Isabela</option>
+                                <option value="Quezon, Isabela">Quezon, Isabela</option>
+                                <option value="Ramon, Isabela">Ramon, Isabela</option>
+                                <option value="Reina Mercedes, Isabela">Reina Mercedes, Isabela</option>
+                                <option value="San Agustin, Isabela">San Agustin, Isabela</option>
+                                <option value="San Guillermo, Isabela">San Guillermo, Isabela</option>
+                                <option value="San Isidro, Isabela">San Isidro, Isabela</option>
+                                <option value="San Mariano, Isabela">San Mariano, Isabela</option>
+                                <option value="San Mateo, Isabela">San Mateo, Isabela</option>
+                                <option value="San Pablo, Isabela">San Pablo, Isabela</option>
+                                <option value="Santa Maria, Isabela">Santa Maria, Isabela</option>
+                                <option value="Santo Tomas, Isabela">Santo Tomas, Isabela</option>
+                                <option value="Santiago City">Santiago City</option>
+                                <option value="Tumauini, Isabela">Tumauini, Isabela</option>
+                                <option value="Delfin Albano, Isabela">Delfin Albano, Isabela</option>
+                                <option value="City of Cauayan, Isabela">City of Cauayan, Isabela</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactNumber">Contact Number <span class="text-danger">*</span></label>
+                            <input type="tel" class="form-control" id="contactNumber" pattern="\d{11}" maxlength="11" title="Contact number must be 11 digits" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cropType">Crop Type <span class="text-danger">*</span></label>
+                            <select class="form-control" id="cropType" required>
+                                <option value="" disabled selected>Select Crop Type</option>
+                                <option value="Irrigated Palay">Irrigated Palay</option>
+                                <option value="Rainfed Palay">Rainfed Palay</option>
+                                <option value="Palay">Palay</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="farmSize">Farm Size (Hectares) <span class="text-danger">*</span></label>
+                            <input type="number" step="0.01" class="form-control" id="farmSize" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="saveFarmerBtn">Save Farmer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Farmer Modal -->
+    <div class="modal fade" id="editFarmerModal" tabindex="-1" role="dialog" aria-labelledby="editFarmerModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editFarmerModalLabel">Edit Farmer</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editFarmerForm">
+                        <input type="hidden" id="editFarmerId">
+                        <div class="form-group">
+                            <label for="editFirstName">First Name</label>
+                            <input type="text" class="form-control" id="editFirstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editLastName">Last Name</label>
+                            <input type="text" class="form-control" id="editLastName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editMiddleName">Middle Name</label>
+                            <input type="text" class="form-control" id="editMiddleName">
+                        </div>
+                        <div class="form-group">
+                            <label for="editExtensionName">Extension Name</label>
+                            <input type="text" class="form-control" id="editExtensionName">
+                        </div>
+                        <div class="form-group">
+                            <label for="editAddress">Address</label>
+                            <select class="form-control" id="editAddress" required>
+                                <option value="" disabled>Select Address</option>
+                                <option value="Alicia, Isabela">Alicia, Isabela</option>
+                                <option value="Angadanan, Isabela">Angadanan, Isabela</option>
+                                <option value="Benito Soliven, Isabela">Benito Soliven, Isabela</option>
+                                <option value="Burgos, Isabela">Burgos, Isabela</option>
+                                <option value="Cabagan, Isabela">Cabagan, Isabela</option>
+                                <option value="Cordon, Isabela">Cordon, Isabela</option>
+                                <option value="Dinapigue, Isabela">Dinapigue, Isabela</option>
+                                <option value="Divilacan, Isabela">Divilacan, Isabela</option>
+                                <option value="Echague, Isabela">Echague, Isabela</option>
+                                <option value="Gamu, Isabela">Gamu, Isabela</option>
+                                <option value="City of Ilagan, Isabela">City of Ilagan, Isabela</option>
+                                <option value="Jones, Isabela">Jones, Isabela</option>
+                                <option value="Maconacon, Isabela">Maconacon, Isabela</option>
+                                <option value="Naguilian, Isabela">Naguilian, Isabela</option>
+                                <option value="Palanan, Isabela">Palanan, Isabela</option>
+                                <option value="Quezon, Isabela">Quezon, Isabela</option>
+                                <option value="Ramon, Isabela">Ramon, Isabela</option>
+                                <option value="Reina Mercedes, Isabela">Reina Mercedes, Isabela</option>
+                                <option value="San Agustin, Isabela">San Agustin, Isabela</option>
+                                <option value="San Guillermo, Isabela">San Guillermo, Isabela</option>
+                                <option value="San Isidro, Isabela">San Isidro, Isabela</option>
+                                <option value="San Mariano, Isabela">San Mariano, Isabela</option>
+                                <option value="San Mateo, Isabela">San Mateo, Isabela</option>
+                                <option value="San Pablo, Isabela">San Pablo, Isabela</option>
+                                <option value="Santa Maria, Isabela">Santa Maria, Isabela</option>
+                                <option value="Santo Tomas, Isabela">Santo Tomas, Isabela</option>
+                                <option value="Santiago City">Santiago City</option>
+                                <option value="Tumauini, Isabela">Tumauini, Isabela</option>
+                                <option value="Delfin Albano, Isabela">Delfin Albano, Isabela</option>
+                                <option value="City of Cauayan, Isabela">City of Cauayan, Isabela</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editContactNumber">Contact Number</label>
+                            <input type="tel" class="form-control" id="editContactNumber" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="editCropType">Crop Type</label>
+                            <select class="form-control" id="editCropType" required>
+                                <option value="" disabled>Select Crop Type</option>
+                                <option value="Irrigated Palay">Irrigated Palay</option>
+                                <option value="Rainfed Palay">Rainfed Palay</option>
+                                <option value="Palay">Palay</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editFarmSize">Farm Size (Hectares)</label>
+                            <input type="number" step="0.01" class="form-control" id="editFarmSize" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="updateFarmerBtn">Update Farmer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- View Farmer Modal -->
+    <div class="modal fade" id="viewFarmerModal" tabindex="-1" role="dialog" aria-labelledby="viewFarmerModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewFarmerModalLabel">Farmer Details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!-- Farmer details will be inserted here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+    </div>
+
+    <!-- All modals here -->
+    <!-- ...existing modals... -->
+
+    <!-- Core JavaScript Libraries (Must load first) -->
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- DataTables -->
+    <script src="/vendor/datatables/jquery.dataTables.min.js"></script>
+    <script src="/vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+    <!-- Template Scripts -->
+    <script src="/js/sb-admin-2.min.js"></script>
+
+    <!-- Initialize DataTable -->
+    <script>
+        let farmersTable;
+        $(document).ready(function() {
+            // Only initialize if not already initialized
+            if (!$.fn.DataTable.isDataTable('#dataTable')) {
+                farmersTable = $('#dataTable').DataTable({
+                    processing: true,
+                    responsive: true,
+                    order: [[0, 'asc']],
+                    pageLength: 10,
+                    lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                    ajax: {
+                        url: '/api/farmers',
+                        dataSrc: ''
+                    },
+                    columns: [
+                        { data: 'farmer_id' },
+                        { data: 'first_name' },
+                        { data: 'last_name' },
+                        { data: 'middle_name' },
+                        { data: 'extension_name' },
+                        { data: 'address' },
+                        { data: 'contact_number' },
+                        { data: 'crop_type' },
+                        { data: 'farm_size' },
+                        {
+                            data: null,
+                            orderable: false,
+                            render: function(data, type, row) {
+                                return `
+                                    <button class="btn btn-primary btn-sm edit-btn" data-id="${row.farmer_id}">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-danger btn-sm delete-btn" data-id="${row.farmer_id}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                `;
+                            }
+                        }
+                    ]
+                });
+            }
+        });
+    </script>
+
+    <!-- Custom Scripts (Load last) -->
+    <script src="/js/custom.js"></script>
+
+</body>
+</html>
