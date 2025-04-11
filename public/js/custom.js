@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const guestBtn = document.getElementById("guest-btn");
     if (guestBtn) {
         guestBtn.addEventListener("click", function () {
-            window.location.href = "/dashboard.html"; // Redirect directly to dashboard
+            window.location.href = "/guest.html"; // Redirect directly to dashboard
         });
     }
 

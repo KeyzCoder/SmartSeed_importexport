@@ -35,14 +35,6 @@
                 </a>
             </li>
 
-            <!-- Nav Item - Farmers -->
-            <li class="nav-item">
-                <a class="nav-link" href="farmers.html">
-                    <i class="fas fa-fw fa-user"></i>
-                    <span>Farmers</span>
-                </a>
-            </li>
-
             <!-- Nav Item - Info -->
             <li class="nav-item">
                 <a class="nav-link" href="info.html">
@@ -68,10 +60,7 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                    <!-- Logout Button -->
-                    <button id="logout-btn" class="btn btn-danger ml-auto">Logout</button>
-                </nav>
+                
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
@@ -164,17 +153,12 @@
     <!-- Scripts -->
     <script>
         // Logout Button
-        document.getElementById("logout-btn").addEventListener("click", function() {
-            localStorage.removeItem("token");
-            window.location.href = "login.html"; // Redirect to login page
-        });
-
+    
         // Sidebar Toggle
         document.getElementById("sidebarToggle").addEventListener("click", function () {
             document.getElementById("accordionSidebar").classList.toggle("toggled");
         });
     </script>
     <script src="js/custom.js"></script>
-    <script src="/vendor/chart.js/Chart.min.js"></script>
 </body>
 </html>

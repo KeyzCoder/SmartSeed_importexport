@@ -40,7 +40,7 @@ app.post('/auth/login', (req, res) => {
     const { email, password } = req.body;
 
     // Query the `users` table in the `smartseed` database
-    const query = " * FROM users WHERE email = ? AND password = ?";
+    const query = "SELECT * FROM users WHERE email = ? AND password = ?";
     
     db.query(query, [email, password], (err, results) => {
         if (err) {
@@ -64,6 +64,32 @@ app.post('/auth/login', (req, res) => {
                 email: user.email,
                 name: user.name
             }
+        });
+    });
+});
+
+app.get('/api/dashboard/stats', (req, res) => {
+    const query = `
+        SELECT 
+            COUNT(DISTINCT f.farmer_id) AS totalFarmers,
+            SUM(f.farm_size) AS totalFarmSize,
+            COALESCE(SUM(fc.bags_received), 0) AS totalMotherSeeds
+        FROM farmers f
+        LEFT JOIN farmer_crops fc ON f.farmer_id = fc.farmer_id
+    `;
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ success: false, error: 'Database error' });
+        }
+
+        const stats = results[0];
+        res.json({
+            success: true,
+            totalFarmers: stats.totalFarmers || 0,
+            totalFarmSize: parseFloat(stats.totalFarmSize || 0).toFixed(2),
+            totalMotherSeeds: stats.totalMotherSeeds || 0
         });
     });
 });

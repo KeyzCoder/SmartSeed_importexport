@@ -257,6 +257,26 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     }
 
+    // Fetch dashboard stats
+    fetch('/api/dashboard/stats')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById('totalFarmers').textContent = data.totalFarmers || '0';
+            document.getElementById('totalFarmSize').textContent = `${data.totalFarmSize || '0'} hectares`;
+            document.getElementById('motherSeeds').textContent = `${data.totalMotherSeeds || '0'} bags`;
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+            document.getElementById('totalFarmers').textContent = 'Error';
+            document.getElementById('totalFarmSize').textContent = 'Error';
+            document.getElementById('motherSeeds').textContent = 'Error';
+        });
+
     // Logout functionality
     if (logoutBtn) {
         logoutBtn.addEventListener("click", function() {
