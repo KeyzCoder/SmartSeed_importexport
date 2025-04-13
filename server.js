@@ -2,6 +2,7 @@ const express = require("express");
 const mysql = require("mysql2"); // Use mysql2 instead of mysql
 const dotenv = require("dotenv");
 const path = require("path");
+const axios = require('axios');
 
 dotenv.config();
 const app = express();
@@ -36,36 +37,68 @@ app.get("/", (req, res) => {
     res.send("Server is running...");
 });
 
-app.post('/auth/login', (req, res) => {
-    const { email, password } = req.body;
+app.post('/auth/login', async (req, res) => {
+    try {
+        const { email, password, captchaResponse } = req.body;
 
-    // Query the `users` table in the `smartseed` database
-    const query = "SELECT * FROM users WHERE email = ? AND password = ?";
-    
-    db.query(query, [email, password], (err, results) => {
-        if (err) {
-            console.error("Database query error:", err);
-            return res.status(500).json({ success: false, error: "Database error" });
-        }
+        // Verify CAPTCHA first
+        //if (!captchaResponse) {
+        //    return res.status(400).json({
+        //        success: false,
+        //        error: 'CAPTCHA is required'
+        //    });
+        //}
 
-        if (results.length === 0) {
-            return res.json({ success: false, error: "Invalid credentials" });
-        }
-
-        // User found
-        const user = results[0];
-
-        // Send response
-        res.json({ 
-            success: true, 
-            message: "Login successful",
-            user: {
-                id: user.id,
-                email: user.email,
-                name: user.name
+        // Verify with Google reCAPTCHA API
+        const recaptchaVerify = await axios.post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            null,
+            {
+                params: {
+                    secret: process.env.RECAPTCHA_SECRET_KEY,
+                    response: captchaResponse
+                }
             }
+        );
+
+        //if (!recaptchaVerify.data.success) {
+        //    return res.status(400).json({
+        //        success: false,
+        //        error: 'Invalid CAPTCHA verification'
+        //    });
+        //}
+
+        // Continue with regular login process
+        const query = "SELECT * FROM users WHERE email = ? AND password = ?";
+        
+        db.query(query, [email, password], (err, results) => {
+            if (err) {
+                console.error("Database query error:", err);
+                return res.status(500).json({ success: false, error: "Database error" });
+            }
+
+            if (results.length === 0) {
+                return res.status(401).json({ success: false, error: "Invalid credentials" });
+            }
+
+            const user = results[0];
+            res.json({ 
+                success: true, 
+                message: "Login successful",
+                user: {
+                    id: user.id,
+                    email: user.email,
+                    name: user.name
+                }
+            });
         });
-    });
+    } catch (error) {
+        console.error('Server error:', error);
+        res.status(500).json({ 
+            success: false, 
+            error: 'Server error occurred' 
+        });
+    }
 });
 
 app.get('/api/dashboard/stats', (req, res) => {
@@ -94,10 +127,9 @@ app.get('/api/dashboard/stats', (req, res) => {
     });
 });
 
+// Import and use routes
 const farmersRoute = require("./routes/farmers");
-app.use("/api/farmers", farmersRoute);
-
-
+app.use("/api/farmers", farmersRoute);  // Make sure this line exists and uses /api/farmers
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

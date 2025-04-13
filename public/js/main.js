@@ -98,11 +98,11 @@ document.addEventListener("DOMContentLoaded", function() {
                     farm_size: parseFloat(document.getElementById("farmSize").value)
                 };
 
-                const response = await fetch('/farmers', {
+                // Update the fetch URL to use the correct API endpoint
+                const response = await fetch('/api/farmers', {  // Changed from '/farmers' to '/api/farmers'
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Accept': 'application/json'
                     },
                     body: JSON.stringify(formData)
                 });
@@ -117,7 +117,12 @@ document.addEventListener("DOMContentLoaded", function() {
                     alert('Farmer added successfully!');
                     $('#addFarmerModal').modal('hide');
                     addFarmerForm.reset();
-                    window.location.reload();
+                    // Refresh the DataTable instead of page reload
+                    if ($.fn.DataTable.isDataTable('#dataTable')) {
+                        $('#dataTable').DataTable().ajax.reload();
+                    } else {
+                        window.location.reload();
+                    }
                 } else {
                     throw new Error(result.message || 'Error adding farmer');
                 }
@@ -154,7 +159,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Fetch farmers data once and use it for both table and dashboard
     if (dataTable || document.getElementById('totalFarmers')) {
-        fetch("/farmers")
+        fetch("/api/farmers")
             .then(response => response.json())
             .then(data => {
                 // Update dashboard stats
@@ -257,25 +262,21 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     }
 
-    // Fetch dashboard stats
-    fetch('/api/dashboard/stats')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            document.getElementById('totalFarmers').textContent = data.totalFarmers || '0';
-            document.getElementById('totalFarmSize').textContent = `${data.totalFarmSize || '0'} hectares`;
-            document.getElementById('motherSeeds').textContent = `${data.totalMotherSeeds || '0'} bags`;
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-            document.getElementById('totalFarmers').textContent = 'Error';
-            document.getElementById('totalFarmSize').textContent = 'Error';
-            document.getElementById('motherSeeds').textContent = 'Error';
-        });
+    if (document.getElementById('totalFarmers')) {
+        fetch('/api/dashboard/stats')
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('totalFarmers').textContent = data.totalFarmers || '0';
+                document.getElementById('totalFarmSize').textContent = `${data.totalFarmSize || '0'} hectares`;
+                document.getElementById('motherSeeds').textContent = `${data.totalMotherSeeds || '0'} bags`;
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+            });
+    }
 
     // Logout functionality
     if (logoutBtn) {

@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const loginForm = document.getElementById("login-form");
     const errorDisplay = document.getElementById("login-error");
 
-    // Update your login form handler
+    // Update the login form handler in custom.js
     if (loginForm) {
         loginForm.addEventListener("submit", async function (event) {
             event.preventDefault();
@@ -57,48 +57,37 @@ document.addEventListener("DOMContentLoaded", function () {
             errorDisplay.textContent = "";
             captchaError.textContent = "";
 
-            // Validate captcha
-            /* if (!captchaResponse) {
+            // Validate captcha - Remove the comment block to enable validation
+            if (!captchaResponse) {
                 captchaError.textContent = "Please complete the captcha";
                 return;
             }
-*/
-
 
             try {
                 const submitBtn = document.querySelector('#login-form button[type="submit"]');
                 submitBtn.innerHTML = 'Logging in...';
                 submitBtn.disabled = true;
 
-                // Update the login fetch call
-                fetch('/auth/login', {
+                const response = await fetch('/auth/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         email: email,
-                        password: password
+                        password: password,
+                        captchaResponse: captchaResponse // Add captcha response to the request
                     })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        localStorage.setItem('token', data.token);
-                        window.location.href = 'dashboard.html';
-                    } else {
-                        throw new Error(data.error || 'Login failed');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    document.getElementById('password-error').textContent = error.message;
                 });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    localStorage.setItem('token', data.token);
+                    window.location.href = 'dashboard.html';
+                } else {
+                    throw new Error(data.error || 'Login failed');
+                }
             } catch (error) {
                 console.error("Login error:", error);
                 errorDisplay.textContent = "Error connecting to server. Please try again.";
