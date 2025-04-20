@@ -6,8 +6,10 @@
     <title>Dashboard - Smart Seed</title>
     <link href="/css/sb-admin-2.css" rel="stylesheet"> <!-- Ensure correct path -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!-- FontAwesome Icons -->
+    <link href="css/custom.css" rel="stylesheet"> <!-- Custom Styles -->
     <script src="/js/main.js" defer></script>
     <script src="js/custom.js"></script>
+
 </head>
 <body id="page-top">
 
@@ -78,73 +80,230 @@
                 <div class="container-fluid">
                     <h1 class="h3 mb-4 text-gray-800">Dashboard</h1>
                     
-                    <!-- Content Row -->
-                    <div class="row">
-                        <!-- Farmers Card -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2" style="cursor: pointer;" onclick="window.location.href='farmers.html'">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Total Number of Farmers
-                                            </div>
-                                            <div id="totalFarmers" class="h5 mb-0 font-weight-bold text-gray-800">
-                                                Loading...
+                    <div class="dashboard-container">
+                        <!-- Main Content Area -->
+                        <div class="dashboard-main">
+                            <!-- Stats Cards Row -->
+                            <div class="row">
+                                <!-- Farmers Card -->
+                                <div class="col-xl-4 col-md-6 mb-4">
+                                    <div class="card border-left-primary shadow h-100 py-2" style="cursor: pointer;" onclick="window.location.href='farmers.html'">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                        Total Number of Farmers
+                                                    </div>
+                                                    <div id="totalFarmers" class="h5 mb-0 font-weight-bold text-gray-800">
+                                                        Loading...
+                                                    </div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i class="fas fa-user fa-2x text-gray-300"></i>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-user fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+
+                                <!-- Total Farm Size Card -->
+                                <div class="col-xl-4 col-md-6 mb-4">
+                                    <div class="card border-left-success shadow h-100 py-2" style="cursor: pointer;" onclick="window.location.href='farmers.html'">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                        Total Farm Size(Hectares)
+                                                    </div>
+                                                    <div id="totalFarmSize" class="h5 mb-0 font-weight-bold text-gray-800">
+                                                        Loading...
+                                                    </div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i class="fas fa-chart-area fa-2x text-gray-300"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Mother Seeds Card -->
+                                <div class="col-xl-4 col-md-6 mb-4">
+                                    <div class="card border-left-info shadow h-100 py-2" style="cursor: pointer;" onclick="window.location.href='farmers.html'">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                        Total Bags of Mother Seeds
+                                                    </div>
+                                                    <div id="motherSeeds" class="h5 mb-0 font-weight-bold text-gray-800">
+                                                        Loading...
+                                                    </div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i class="fas fa-seedling fa-2x text-gray-300"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Mother Seeds Distribution -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card shadow mb-4">
+                                        <div class="card-header py-3">
+                                            <h6 class="m-0 font-weight-bold text-primary">Mother Seeds Distribution</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="chart-pie pt-4 pb-2">
+                                                <canvas id="motherSeedsPieChart"></canvas>
+                                            </div>
+                                            <div class="mt-4 text-center small">
+                                                <span class="mr-2">
+                                                    <i class="fas fa-circle text-rc216"></i> NSIC Rc 216 (Tubigan 17)
+                                                </span>
+                                                <span class="mr-2">
+                                                    <i class="fas fa-circle text-rc160"></i> NSIC Rc 160
+                                                </span>
+                                                <span class="mr-2">
+                                                    <i class="fas fa-circle text-rc300"></i> NSIC Rc 300 (Tubigan 24)
+                                                </span>
+                                                <span class="mr-2">
+                                                    <i class="fas fa-circle text-rc222"></i> NSIC Rc 222 (Tubigan 18)
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            
+
+                            <!-- Yield History in Region 2 -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card shadow mb-4">
+                                        <div class="card-header py-3">
+                                            <h6 class="m-0 font-weight-bold text-primary">Yield History in Region 2</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="chart-area">
+                                                <canvas id="yieldHistoryChart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Total Palay Production in Region 2 -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card shadow mb-4">
+                                        <div class="card-header py-3">
+                                            <h6 class="m-0 font-weight-bold text-primary">Total Palay Production in Region 2</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="chart-area">
+                                                <canvas id="totalProductionChart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                        
+
+                        <!-- Yield Calculator -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                                        <h6 class="m-0 font-weight-bold text-primary">Yield Calculator</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <form id="yieldCalculatorForm">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="cropVariety">Rice Variety</label>
+                                                        <select class="form-control" id="cropVariety" required>
+                                                            <option value="">Select Variety</option>
+                                                            <option value="rc216">NSIC Rc 216 (Tubigan 17)</option>
+                                                            <option value="rc160">NSIC Rc 160</option>
+                                                            <option value="rc300">NSIC Rc 300 (Tubigan 24)</option>
+                                                            <option value="rc222">NSIC Rc 222 (Tubigan 18)</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="farmingMethod">Farming Method</label>
+                                                        <select class="form-control" id="farmingMethod" required>
+                                                            <option value="">Select Method</option>
+                                                            <option value="irrigated">Irrigated</option>
+                                                            <option value="rainfed">Rainfed</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="landArea">Land Area (hectares)</label>
+                                                        <input type="number" class="form-control" id="landArea" step="0.01" min="0" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label for="plantingMethod">Planting Method</label>
+                                                        <select class="form-control" id="plantingMethod">
+                                                            <option value="transplanted">Transplanted</option>
+                                                            <option value="direct">Direct Seeded</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Calculate Yield</button>
+                                        </form>
+                                        <div class="mt-4" id="yieldResult" style="display: none;">
+                                            <div class="alert alert-info">
+                                                <h6 class="font-weight-bold mb-2">Estimated Yield:</h6>
+                                                <p class="mb-0" id="yieldEstimate"></p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Total Farm Size Card -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2" style="cursor: pointer;" onclick="window.location.href='farmers.html'">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Total Farm Size(Hectares)
-                                            </div>
-                                            <div id="totalFarmSize" class="h5 mb-0 font-weight-bold text-gray-800">
-                                                Loading...
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-chart-area fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    </div>
 
-                        <!-- Mother Seeds Card -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2" style="cursor: pointer;" onclick="window.location.href='farmers.html'">
+
+
+
+                        <!-- Right Sidebar -->
+                        <div class="dashboard-sidebar">
+                            <div class="card shadow h-100">
+                                <div class="card-header py-3">
+                                    <h6 class="m-0 font-weight-bold text-success">Farmer Crop Holdings per Municipality</h6>
+                                </div>
                                 <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                                Total Bags of Mother Seeds
+                                    <div id="cropTypeBreakdown" class="list-group">
+                                        <!-- Items will be inserted here by JavaScript -->
+                                        <div class="text-center py-3">
+                                            <div class="spinner-border text-success" role="status">
+                                                <span class="sr-only">Loading...</span>
                                             </div>
-                                            <div id="motherSeeds" class="h5 mb-0 font-weight-bold text-gray-800">
-                                                Loading...
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-seedling fa-2x text-gray-300"></i>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>  
+                    </div>
                 </div>
-
+                
                 
 
                 
@@ -169,12 +328,23 @@
             window.location.href = "login.html"; // Redirect to login page
         });
 
-        // Sidebar Toggle
-        document.getElementById("sidebarToggle").addEventListener("click", function () {
-            document.getElementById("accordionSidebar").classList.toggle("toggled");
-        });
+
+        
     </script>
     <script src="js/custom.js"></script>
     <script src="/vendor/chart.js/Chart.min.js"></script>
+    <!-- Add these scripts just before the closing </body> tag -->
+    <!-- Core JavaScript -->
+    <script src="/vendor/jquery/jquery.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Chart.js -->
+    <script src="/vendor/chart.js/Chart.min.js"></script>
+
+    <!-- Custom Scripts -->
+    <script src="/js/sb-admin-2.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="/js/custom.js"></script>
 </body>
 </html>

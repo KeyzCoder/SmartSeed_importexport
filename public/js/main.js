@@ -278,6 +278,170 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     }
 
+    // Replace the existing crop breakdown fetch code
+    if (document.getElementById('cropTypeBreakdown')) {
+        fetch('/api/dashboard/crop-breakdown')
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return response.json();
+            })
+            .then(result => {
+                if (result.success && result.data.length > 0) {
+                    const container = document.getElementById('cropTypeBreakdown');
+                    
+                    // Group data by location
+                    const groupedData = result.data.reduce((acc, item) => {
+                        if (!acc[item.address]) {
+                            acc[item.address] = {
+                                'NSIC Rc 216 (Tubigan 17)': 0,
+                                'NSIC Rc 160': 0,
+                                'NSIC Rc 300 (Tubigan 24)': 0,
+                                'NSIC Rc 222 (Tubigan 18)': 0
+                            };
+                        }
+                        acc[item.address][item.crop_type] = item.count;
+                        return acc;
+                    }, {});
+
+                    // Clear loading spinner
+                    container.innerHTML = '';
+
+                    // Create location sections
+                    Object.entries(groupedData).forEach(([location, crops]) => {
+                        const locationDiv = document.createElement('div');
+                        locationDiv.className = 'location-item';
+                        
+                        const locationContent = `
+                            <div class="location-header">
+                                <i class="fas fa-map-marker-alt mr-2"></i>${location}
+                            </div>
+                            <div class="crop-list">
+                                <div class="crop-item">
+                                    <span class="crop-name rc216">NSIC Rc 216 (Tubigan 17)</span>
+                                    <span class="crop-count">${crops['NSIC Rc 216 (Tubigan 17)'] || 0}</span>
+                                </div>
+                                <div class="crop-item">
+                                    <span class="crop-name rc160">NSIC Rc 160</span>
+                                    <span class="crop-count">${crops['NSIC Rc 160'] || 0}</span>
+                                </div>
+                                <div class="crop-item">
+                                    <span class="crop-name rc300">NSIC Rc 300 (Tubigan 24)</span>
+                                    <span class="crop-count">${crops['NSIC Rc 300 (Tubigan 24)'] || 0}</span>
+                                </div>
+                                <div class="crop-item">
+                                    <span class="crop-name rc222">NSIC Rc 222 (Tubigan 18)</span>
+                                    <span class="crop-count">${crops['NSIC Rc 222 (Tubigan 18)'] || 0}</span>
+                                </div>
+                            </div>
+                        `;
+                        
+                        locationDiv.innerHTML = locationContent;
+                        container.appendChild(locationDiv);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching crop breakdown:', error);
+                const container = document.getElementById('cropTypeBreakdown');
+                container.innerHTML = `
+                    <div class="text-center text-danger p-3">
+                        <i class="fas fa-exclamation-circle mr-2"></i>
+                        Error loading data
+                    </div>
+                `;
+            });
+    }
+
+    // Add this after your existing dashboard stats fetch code
+    function initMotherSeedsPieChart() {
+        const ctx = document.getElementById('motherSeedsPieChart');
+        if (!ctx) return;
+
+        console.log('Initializing mother seeds pie chart...');
+
+        fetch('/api/dashboard/mother-seeds-distribution')
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return response.json();
+            })
+            .then(result => {
+                console.log('Received data:', result);
+
+                const data = result.data;
+
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: [
+                            'NSIC Rc 216 (Tubigan 17)',
+                            'NSIC Rc 160',
+                            'NSIC Rc 300 (Tubigan 24)',
+                            'NSIC Rc 222 (Tubigan 18)'
+                        ],
+                        datasets: [{
+                            data: [
+                                data.rc216 || 0,
+                                data.rc160 || 0,
+                                data.rc300 || 0,
+                                data.rc222 || 0
+                            ],
+                            backgroundColor: [
+                                '#4e73df',
+                                '#1cc88a',
+                                '#36b9cc',
+                                '#f6c23e'
+                            ],
+                            hoverBackgroundColor: [
+                                '#2e59d9',
+                                '#17a673',
+                                '#2c9faf',
+                                '#f4b619'
+                            ],
+                            hoverBorderColor: "rgba(234, 236, 244, 1)"
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        tooltips: {
+                            backgroundColor: "rgb(255,255,255)",
+                            bodyFontColor: "#858796",
+                            borderColor: '#dddfeb',
+                            borderWidth: 1,
+                            xPadding: 15,
+                            yPadding: 15,
+                            displayColors: false,
+                            caretPadding: 10,
+                            callbacks: {
+                                label: function(tooltipItem, data) {
+                                    const dataset = data.datasets[tooltipItem.datasetIndex];
+                                    const value = dataset.data[tooltipItem.index];
+                                    return `${data.labels[tooltipItem.index]}: ${value} farmers`;
+                                }
+                            }
+                        },
+                        legend: {
+                            display: false
+                        },
+                        cutoutPercentage: 80
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching mother seeds distribution:', error);
+                ctx.parentElement.innerHTML = `
+                    <div class="text-center text-danger">
+                        <i class="fas fa-exclamation-circle"></i>
+                        Error loading chart data
+                    </div>
+                `;
+            });
+    }
+
+    // Call the function when the document is loaded
+    if (document.getElementById('motherSeedsPieChart')) {
+        initMotherSeedsPieChart();
+    }
+
     // Logout functionality
     if (logoutBtn) {
         logoutBtn.addEventListener("click", function() {
@@ -298,40 +462,41 @@ document.addEventListener("DOMContentLoaded", function() {
         const cropsTableBody = document.getElementById("cropsList");
         const cropsForFarmer = document.getElementById("cropsForFarmer");
         const cropsFarmerIdSpan = document.querySelector("#cropsForFarmer .card-header h6 span");
-
+    
         if (!cropsTableBody || !cropsForFarmer) {
             console.error("Required elements not found in the DOM");
             return;
         }
-
+    
         // Show the crops container
         cropsForFarmer.style.display = "block";
-
+    
         // Update the Farmer ID in the header
         if (cropsFarmerIdSpan) {
             cropsFarmerIdSpan.textContent = farmerId;
         }
-
+    
         // Clear existing rows in the table body
         cropsTableBody.innerHTML = "";
-
+    
         if (cropsData && cropsData.length > 0) {
             // Populate the table with crops data
-            cropsData.forEach(crop => {
-                const row = document.createElement("tr");
-                row.innerHTML = `
-                    <td>${crop.crop_type || '-'}</td>
-                    <td>${crop.bags_received || '-'}</td>
-                    <td>${crop.date_received || '-'}</td>
-                    <td>${crop.predicted_yield || '-'}</td>
-                `;
-                cropsTableBody.appendChild(row);
-            });
+            cropsTableBody.innerHTML = `${cropsData.length ? cropsData.map(crop => `
+                <tr data-crop-id="${crop.id}">
+                    <td>${crop.crop_type}</td>
+                    <td>${crop.bags_received}</td>
+                    <td>${new Date(crop.date_received).toLocaleDateString()}</td>
+                </tr>
+            `).join('') : `
+                <tr>
+                    <td colspan="3" class="text-center text-muted">No crops data available</td>
+                </tr>
+            `}`;
         } else {
             // If no crops data is available, display a message in the table
             cropsTableBody.innerHTML = `
                 <tr>
-                    <td colspan="4" class="text-center">No crops data available for this farmer.</td>
+                    <td colspan="3" class="text-center">No crops data available for this farmer.</td>
                 </tr>
             `;
         }
@@ -416,5 +581,112 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     }
+});
+
+// Add this after your existing code
+
+// Yield calculator functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const yieldCalculatorForm = document.getElementById('yieldCalculatorForm');
+    if (!yieldCalculatorForm) return;
+
+    const yieldRates = {
+        rc216: {
+            irrigated: {
+                transplanted: 6000,
+                direct: 5700
+            },
+            rainfed: {
+                transplanted: 0,
+                direct: 0
+            }
+        },
+        rc160: {
+            irrigated: {
+                transplanted: 6100,
+                direct: 6100
+            },
+            rainfed: {
+                transplanted: 4750,
+                direct: 4750
+            }
+        },
+        rc300: {
+            irrigated: {
+                transplanted: 6400,
+                direct: 6400
+            },
+            rainfed: {
+                transplanted: 0,
+                direct: 0
+            }
+        },
+        rc222: {
+            irrigated: {
+                transplanted: 6100,
+                direct: 6100
+            },
+            rainfed: {
+                transplanted: 4750,
+                direct: 4750
+            }
+        }
+    };
+
+    // Update form based on selections
+    document.getElementById('cropVariety').addEventListener('change', updateFormOptions);
+    document.getElementById('farmingMethod').addEventListener('change', updateFormOptions);
+
+    function updateFormOptions() {
+        const variety = document.getElementById('cropVariety').value;
+        const farmingMethod = document.getElementById('farmingMethod').value;
+        const plantingMethodSelect = document.getElementById('plantingMethod');
+
+        if (variety && farmingMethod) {
+            // Disable rainfed option for varieties that don't support it
+            if ((variety === 'rc216' || variety === 'rc300') && farmingMethod === 'rainfed') {
+                document.getElementById('farmingMethod').value = 'irrigated';
+                alert('This variety is not recommended for rainfed conditions.');
+            }
+        }
+    }
+
+    // Handle form submission
+    yieldCalculatorForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const variety = document.getElementById('cropVariety').value;
+        const farmingMethod = document.getElementById('farmingMethod').value;
+        const plantingMethod = document.getElementById('plantingMethod').value;
+        const landArea = parseFloat(document.getElementById('landArea').value);
+
+        if (!variety || !farmingMethod || !landArea) {
+            alert('Please fill in all required fields');
+            return;
+        }
+
+        // Calculate yield
+        const yieldRate = yieldRates[variety][farmingMethod][plantingMethod];
+        const totalYield = yieldRate * landArea;
+
+        // Display result
+        const resultDiv = document.getElementById('yieldResult');
+        const estimateText = document.getElementById('yieldEstimate');
+        
+        if (yieldRate === 0) {
+            estimateText.innerHTML = `
+                <strong class="text-danger">Not Recommended</strong><br>
+                This variety is not recommended for ${farmingMethod} conditions.
+            `;
+        } else {
+            estimateText.innerHTML = `
+                <strong>Total Estimated Yield:</strong> ${totalYield.toLocaleString()} kg<br>
+                <strong>Yield Rate:</strong> ${yieldRate.toLocaleString()} kg/hectare<br>
+                <strong>Land Area:</strong> ${landArea} hectare(s)
+            `;
+        }
+        
+        resultDiv.style.display = 'block';
+    });
 });
 

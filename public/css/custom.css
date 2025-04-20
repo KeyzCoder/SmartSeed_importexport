@@ -32,3 +32,195 @@
     font-size: 18px;
     color: #6c757d;
 }
+
+
+
+    .location-item {
+        border-left: 4px solid #1cc88a;
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: #f8f9fc;
+        border-radius: 4px;
+    }
+
+    .location-header {
+        font-weight: bold;
+        color: #5a5c69;
+        margin-bottom: 10px;
+        font-size: 0.9rem;
+    }
+
+    .crop-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 4px 0;
+        margin: 4px 0;
+        border-bottom: 1px dashed #e3e6f0;
+    }
+
+    .crop-name {
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .crop-count {
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        color: white;
+        min-width: 30px;
+        text-align: center;
+    }
+
+    /* Crop type specific colors */
+    .rc216 {
+        color: #4e73df;
+    }
+    .rc216 + .crop-count {
+        background-color: #4e73df;
+    }
+
+    .rc160 {
+        color: #1cc88a;
+    }
+    .rc160 + .crop-count {
+        background-color: #1cc88a;
+    }
+
+    .rc300 {
+        color: #36b9cc;
+    }
+    .rc300 + .crop-count {
+        background-color: #36b9cc;
+    }
+
+    .rc222 {
+        color: #f6c23e;
+    }
+    .rc222 + .crop-count {
+        background-color: #f6c23e;
+    }
+
+    .crop-item:last-child {
+        border-bottom: none;
+    }
+
+
+
+/* Pie Chart Colors */
+.text-rc216 { color: #4e73df; }
+.text-rc160 { color: #1cc88a; }
+.text-rc300 { color: #36b9cc; }
+.text-rc222 { color: #f6c23e; }
+
+.chart-pie {
+    position: relative;
+    height: 300px;
+    min-height: 300px;
+}
+
+.chart-pie {
+    position: relative;
+    height: 300px;
+}
+
+.chart-pie canvas {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+/* Yield Calculator Styles */
+#yieldCalculatorForm {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+#yieldCalculatorForm .form-group {
+    margin-bottom: 1rem;
+}
+
+#yieldCalculatorForm label {
+    font-weight: 600;
+    color: #4e73df;
+}
+
+#yieldResult {
+    transition: all 0.3s ease;
+}
+
+#yieldResult .alert {
+    border-left: 4px solid #36b9cc;
+}
+
+#yieldEstimate {
+    line-height: 1.8;
+}
+
+.form-control:focus {
+    border-color: #4e73df;
+    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+
+.btn-primary {
+    background-color: #4e73df;
+    border-color: #4e73df;
+}
+
+.btn-primary:hover {
+    background-color: #2e59d9;
+    border-color: #2e59d9;
+}
+
+/* Dashboard Layout */
+.dashboard-container {
+    display: flex;
+    gap: 1rem;
+    padding: 0.5rem;
+}
+
+.dashboard-main {
+    flex: 1;
+    padding-right: 1rem;
+}
+
+.dashboard-sidebar {
+    width: 300px;
+    flex-shrink: 0;
+}
+
+/* Card Adjustments */
+.card {
+    margin-bottom: 1rem;
+}
+
+.dashboard-sidebar .card {
+    position: sticky;
+    top: 1rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .dashboard-container {
+        flex-direction: column;
+    }
+
+    .dashboard-sidebar {
+        width: 100%;
+    }
+
+    .dashboard-sidebar .card {
+        position: static;
+    }
+}
+
+/* Remove previous scrollbar styles */
+.dashboard-main::-webkit-scrollbar,
+.dashboard-sidebar::-webkit-scrollbar,
+.dashboard-main::-webkit-scrollbar-track,
+.dashboard-sidebar::-webkit-scrollbar-track,
+.dashboard-main::-webkit-scrollbar-thumb,
+.dashboard-sidebar::-webkit-scrollbar-thumb {
+    display: none;
+}

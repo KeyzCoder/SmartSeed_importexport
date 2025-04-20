@@ -151,7 +151,6 @@
                                                         <th>Crop Type</th>
                                                         <th>Bags Received</th>
                                                         <th>Date Received</th>
-                                                        <th>Predicted Yield</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="cropsList">
@@ -166,23 +165,7 @@
                                 </div>
                             </div>
 
-                            <!-- Farmer Details Section - Right Column -->
-                            <div class="col-lg-4">
-                                <div id="farmerDetails" class="card shadow mb-4" style="display: none;">
-                                    <div class="card-header py-3">
-                                        <h6 class="m-0 font-weight-bold text-primary">Farmer Details</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <p><strong>Farmer ID:</strong> <span id="farmerId"></span></p>
-                                        <p><strong>Name:</strong> <span id="farmerName"></span></p>
-                                        <p><strong>Address:</strong> <span id="farmerAddress"></span></p>
-                                        <p><strong>Contact Number:</strong> <span id="farmerContact"></span></p>
-                                        <p><strong>Crop Type:</strong> <span id="farmerCrop"></span></p>
-                                        <p><strong>Farm Size:</strong> <span id="farmerFarmSize"></span></p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                            
 
                         <!-- Farmer Crops Modal -->
                         <!-- Crops for Farmer ID Section -->
@@ -198,7 +181,6 @@
                                                 <th>Crop Type</th>
                                                 <th>Bags Received</th>
                                                 <th>Date Received</th>
-                                                <th>Predicted Yield</th>
                                             </tr>
                                         </thead>
                                         <tbody id="cropsList">
@@ -328,8 +310,10 @@
                             <label for="cropType">Crop Type <span class="text-danger">*</span></label>
                             <select class="form-control" id="cropType" required>
                                 <option value="" disabled selected>Select Crop Type</option>
-                                <option value="Irrigated Palay">Irrigated Palay</option>
-                                <option value="Rainfed Palay">Rainfed Palay</option>
+                                <option value="NSIC Rc 216">NSIC Rc 216 (Tubigan 17)</option>
+                                <option value="NSIC Rc 160">NSIC Rc 160</option>
+                                <option value="NSIC Rc 300">NSIC Rc 300 (Tubigan 24)</option>
+                                <option value="NSIC Rc 222">NSIC Rc 222 (Tubigan 18)</option>
                                 <option value="Palay">Palay</option>
                             </select>
                         </div>
@@ -420,9 +404,10 @@
                             <label for="editCropType">Crop Type</label>
                             <select class="form-control" id="editCropType" required>
                                 <option value="" disabled>Select Crop Type</option>
-                                <option value="Irrigated Palay">Irrigated Palay</option>
-                                <option value="Rainfed Palay">Rainfed Palay</option>
-                                <option value="Palay">Palay</option>
+                               <option value="NSIC Rc 216">NSIC Rc 216 (Tubigan 17)</option>
+                                <option value="NSIC Rc 160">NSIC Rc 160</option>
+                                <option value="NSIC Rc 300">NSIC Rc 300 (Tubigan 24)</option>
+                                <option value="NSIC Rc 222">NSIC Rc 222 (Tubigan 18)</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -453,7 +438,92 @@
                     <!-- Farmer details will be inserted here -->
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="addCropsBtn">
+                        <i class="fas fa-plus"></i> Add Crops
+                    </button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Crops Modal -->
+    <div class="modal fade" id="addCropsModal" tabindex="-1" role="dialog" aria-labelledby="addCropsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addCropsModalLabel">Add Crops</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addCropsForm">
+                        <input type="hidden" id="cropsFarmerId">
+                        <div class="form-group">
+                            <label for="cropType">Crop Type</label>
+                            <select class="form-control" id="cropsType" required>
+                                <option value="">Select Crop Type</option>
+                                <option value="NSIC Rc 216">NSIC Rc 216 (Tubigan 17)</option>
+                                <option value="NSIC Rc 160">NSIC Rc 160</option>
+                                <option value="NSIC Rc 300">NSIC Rc 300 (Tubigan 24)</option>
+                                <option value="NSIC Rc 222">NSIC Rc 222 (Tubigan 18)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="bagsReceived">Number of Bags Received</label>
+                            <input type="number" class="form-control" id="bagsReceived" required min="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="dateReceived">Date Received</label>
+                            <input type="date" class="form-control" id="dateReceived" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="saveCropsBtn">Save Crops</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Crop Modal -->
+    <div class="modal fade" id="editCropModal" tabindex="-1" role="dialog" aria-labelledby="editCropModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCropModalLabel">Edit Crop</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editCropForm">
+                        <input type="hidden" id="editCropId">
+                        <div class="form-group">
+                            <label for="editCropType">Crop Type</label>
+                            <select class="form-control" id="editCropType" required>
+                                <option value="">Select Crop Type</option>
+                                <option value="NSIC Rc 216">NSIC Rc 216 (Tubigan 17)</option>
+                                <option value="NSIC Rc 160">NSIC Rc 160</option>
+                                <option value="NSIC Rc 300">NSIC Rc 300 (Tubigan 24)</option>
+                                <option value="NSIC Rc 222">NSIC Rc 222 (Tubigan 18)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editBagsReceived">Number of Bags Received</label>
+                            <input type="number" class="form-control" id="editBagsReceived" required min="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="editDateReceived">Date Received</label>
+                            <input type="date" class="form-control" id="editDateReceived" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" id="updateCropBtn">Update Crop</button>
                 </div>
             </div>
         </div>
@@ -522,10 +592,19 @@
             }
         });
     </script>
+    <script>
+        // Logout Button
+        document.getElementById("logout-btn").addEventListener("click", function() {
+            localStorage.removeItem("token");
+            window.location.href = "login.html"; // Redirect to login page
+        });
+
+    </script>
 
     <!-- Custom Scripts (Load last) -->
+    
     <script src="/js/custom.js"></script>
-    <script src="/js/main.js"></script>
+    
 
 </body>
 </html>
