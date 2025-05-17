@@ -173,7 +173,98 @@ router.put("/:id", (req, res) => {
         res.json({
             success: true,
             message: 'Farmer updated successfully'
+        });    });
+});
+
+// Import bulk farmers via CSV
+router.post("/import", (req, res) => {
+    const { farmers } = req.body;
+    
+    if (!farmers || !Array.isArray(farmers) || farmers.length === 0) {
+        return res.status(400).json({ 
+            success: false,
+            error: 'Invalid farmers data' 
         });
+    }
+
+    // Begin a transaction to ensure data integrity
+    db.beginTransaction(err => {
+        if (err) {
+            console.error('Transaction error:', err);
+            return res.status(500).json({ 
+                success: false, 
+                error: 'Database transaction failed' 
+            });
+        }
+
+        let successCount = 0;
+        let errorCount = 0;
+        const totalCount = farmers.length;
+        
+        // Process each farmer record
+        const processNext = (index) => {
+            // If we've processed all records, commit the transaction
+            if (index >= totalCount) {
+                db.commit(err => {
+                    if (err) {
+                        console.error('Commit error:', err);
+                        return db.rollback(() => {
+                            res.status(500).json({ 
+                                success: false, 
+                                error: 'Failed to commit transaction' 
+                            });
+                        });
+                    }
+                    
+                    // Return success response with counts
+                    return res.json({
+                        success: true,
+                        message: 'Import completed',
+                        imported: successCount,
+                        failed: errorCount,
+                        total: totalCount
+                    });
+                });
+                return;
+            }
+            
+            const farmer = farmers[index];
+            
+            // SQL query to insert farmer
+            const sql = `
+                INSERT INTO farmers (
+                    first_name, last_name, middle_name, extension_name,
+                    address, contact_number, crop_type, farm_size
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            `;
+            
+            const values = [
+                farmer.first_name,
+                farmer.last_name,
+                farmer.middle_name || '',
+                farmer.extension_name || '',
+                farmer.address,
+                farmer.contact_number || '',
+                farmer.crop_type,
+                farmer.farm_size || 0
+            ];
+            
+            // Execute the insert
+            db.query(sql, values, (err, result) => {
+                if (err) {
+                    console.error('Insert error for record:', index, err);
+                    errorCount++;
+                } else {
+                    successCount++;
+                }
+                
+                // Process next record regardless of success/failure
+                processNext(index + 1);
+            });
+        };
+        
+        // Start processing with the first record
+        processNext(0);
     });
 });
 

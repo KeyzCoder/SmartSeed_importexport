@@ -94,13 +94,20 @@
                                 <p class="mb-4">The table provides an overview of registered farmers, including their name, 
                                     location, farm size, crop type, and contact details.</p>
                             </div>
-                            <div>
+                            <div class="btn-group">
                                 <button class="btn btn-success btn-sm mr-2" id="addFarmerBtn">
                                     <i class="fas fa-plus"></i> Add Farmer
                                 </button>
-                                <button class="btn btn-primary btn-sm" id="printDataBtn">
+                                <button class="btn btn-primary btn-sm mr-2" id="printDataBtn">
                                     <i class="fas fa-print"></i> Print Data
                                 </button>
+                                <button class="btn btn-info btn-sm mr-2" id="exportDataBtn">
+                                    <i class="fas fa-file-export"></i> Export Data
+                                </button>
+                                <button class="btn btn-warning btn-sm" id="importDataBtn">
+                                    <i class="fas fa-file-import"></i> Import Data
+                                </button>
+                                <input type="file" id="importFile" accept=".csv" style="display: none;">
                             </div>
                         </div>
 
@@ -267,12 +274,45 @@
                             <input type="text" class="form-control" id="extensionName">
                         </div>
                         <div class="form-group">
-                            <label for="address">Address <span class="text-danger">*</span></label>
-                            <select class="form-control" id="address" required>
+                            <label for="address">Address <span class="text-danger">*</span></label>                            <select class="form-control" id="address" required>
                                 <option value="" disabled selected>Select Address</option>
                                 <option value="Alicia, Isabela">Alicia, Isabela</option>
                                 <option value="Angadanan, Isabela">Angadanan, Isabela</option>
+                                <option value="Aurora, Isabela">Aurora, Isabela</option>
                                 <option value="Benito Soliven, Isabela">Benito Soliven, Isabela</option>
+                                <option value="Burgos, Isabela">Burgos, Isabela</option>
+                                <option value="Cabagan, Isabela">Cabagan, Isabela</option>
+                                <option value="Cabatuan, Isabela">Cabatuan, Isabela</option>
+                                <option value="City of Cauayan, Isabela">City of Cauayan, Isabela</option>
+                                <option value="Cordon, Isabela">Cordon, Isabela</option>
+                                <option value="Delfin Albano, Isabela">Delfin Albano, Isabela</option>
+                                <option value="Dinapigue, Isabela">Dinapigue, Isabela</option>
+                                <option value="Divilacan, Isabela">Divilacan, Isabela</option>
+                                <option value="Echague, Isabela">Echague, Isabela</option>
+                                <option value="Gamu, Isabela">Gamu, Isabela</option>
+                                <option value="Ilagan City, Isabela">Ilagan City, Isabela</option>
+                                <option value="Jones, Isabela">Jones, Isabela</option>
+                                <option value="Luna, Isabela">Luna, Isabela</option>
+                                <option value="Maconacon, Isabela">Maconacon, Isabela</option>
+                                <option value="Mallig, Isabela">Mallig, Isabela</option>
+                                <option value="Naguilian, Isabela">Naguilian, Isabela</option>
+                                <option value="Palanan, Isabela">Palanan, Isabela</option>
+                                <option value="Quezon, Isabela">Quezon, Isabela</option>
+                                <option value="Quirino, Isabela">Quirino, Isabela</option>
+                                <option value="Ramon, Isabela">Ramon, Isabela</option>
+                                <option value="Reina Mercedes, Isabela">Reina Mercedes, Isabela</option>
+                                <option value="Roxas, Isabela">Roxas, Isabela</option>
+                                <option value="San Agustin, Isabela">San Agustin, Isabela</option>
+                                <option value="San Guillermo, Isabela">San Guillermo, Isabela</option>
+                                <option value="San Isidro, Isabela">San Isidro, Isabela</option>
+                                <option value="San Manuel, Isabela">San Manuel, Isabela</option>
+                                <option value="San Mariano, Isabela">San Mariano, Isabela</option>
+                                <option value="San Mateo, Isabela">San Mateo, Isabela</option>
+                                <option value="San Pablo, Isabela">San Pablo, Isabela</option>
+                                <option value="Santa Maria, Isabela">Santa Maria, Isabela</option>
+                                <option value="Santiago City, Isabela">Santiago City, Isabela</option>
+                                <option value="Santo Tomas, Isabela">Santo Tomas, Isabela</option>
+                                <option value="Tumauini, Isabela">Tumauini, Isabela</option>
                                 <option value="Burgos, Isabela">Burgos, Isabela</option>
                                 <option value="Cabagan, Isabela">Cabagan, Isabela</option>
                                 <option value="Cordon, Isabela">Cordon, Isabela</option>
@@ -310,10 +350,10 @@
                             <label for="cropType">Crop Type <span class="text-danger">*</span></label>
                             <select class="form-control" id="cropType" required>
                                 <option value="" disabled selected>Select Crop Type</option>
-                                <option value="NSIC Rc 216">NSIC Rc 216 (Tubigan 17)</option>
+                                <option value="NSIC Rc 216 (Tubigan 17)">NSIC Rc 216 (Tubigan 17)</option>
                                 <option value="NSIC Rc 160">NSIC Rc 160</option>
-                                <option value="NSIC Rc 300">NSIC Rc 300 (Tubigan 24)</option>
-                                <option value="NSIC Rc 222">NSIC Rc 222 (Tubigan 18)</option>
+                                <option value="NSIC Rc 300 (Tubigan 24)">NSIC Rc 300 (Tubigan 24)</option>
+                                <option value="NSIC Rc 222 (Tubigan 18)">NSIC Rc 222 (Tubigan 18)</option>
                                 <option value="Palay">Palay</option>
                             </select>
                         </div>
@@ -404,10 +444,10 @@
                             <label for="editCropType">Crop Type</label>
                             <select class="form-control" id="editCropType" required>
                                 <option value="" disabled>Select Crop Type</option>
-                               <option value="NSIC Rc 216">NSIC Rc 216 (Tubigan 17)</option>
+                               <option value="NSIC Rc 216 (Tubigan 17)">NSIC Rc 216 (Tubigan 17)</option>
                                 <option value="NSIC Rc 160">NSIC Rc 160</option>
-                                <option value="NSIC Rc 300">NSIC Rc 300 (Tubigan 24)</option>
-                                <option value="NSIC Rc 222">NSIC Rc 222 (Tubigan 18)</option>
+                                <option value="NSIC Rc 300 (Tubigan 24)">NSIC Rc 300 (Tubigan 24)</option>
+                                <option value="NSIC Rc 222 (Tubigan 18)">NSIC Rc 222 (Tubigan 18)</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -461,13 +501,12 @@
                     <form id="addCropsForm">
                         <input type="hidden" id="cropsFarmerId">
                         <div class="form-group">
-                            <label for="cropType">Crop Type</label>
-                            <select class="form-control" id="cropsType" required>
+                            <label for="cropType">Crop Type</label>                            <select class="form-control" id="cropsType" required>
                                 <option value="">Select Crop Type</option>
-                                <option value="NSIC Rc 216">NSIC Rc 216 (Tubigan 17)</option>
+                                <option value="NSIC Rc 216 (Tubigan 17)">NSIC Rc 216 (Tubigan 17)</option>
                                 <option value="NSIC Rc 160">NSIC Rc 160</option>
-                                <option value="NSIC Rc 300">NSIC Rc 300 (Tubigan 24)</option>
-                                <option value="NSIC Rc 222">NSIC Rc 222 (Tubigan 18)</option>
+                                <option value="NSIC Rc 300 (Tubigan 24)">NSIC Rc 300 (Tubigan 24)</option>
+                                <option value="NSIC Rc 222 (Tubigan 18)">NSIC Rc 222 (Tubigan 18)</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -502,13 +541,12 @@
                     <form id="editCropForm">
                         <input type="hidden" id="editCropId">
                         <div class="form-group">
-                            <label for="editCropType">Crop Type</label>
-                            <select class="form-control" id="editCropType" required>
+                            <label for="editCropType">Crop Type</label>                            <select class="form-control" id="editCropType" required>
                                 <option value="">Select Crop Type</option>
-                                <option value="NSIC Rc 216">NSIC Rc 216 (Tubigan 17)</option>
+                                <option value="NSIC Rc 216 (Tubigan 17)">NSIC Rc 216 (Tubigan 17)</option>
                                 <option value="NSIC Rc 160">NSIC Rc 160</option>
-                                <option value="NSIC Rc 300">NSIC Rc 300 (Tubigan 24)</option>
-                                <option value="NSIC Rc 222">NSIC Rc 222 (Tubigan 18)</option>
+                                <option value="NSIC Rc 300 (Tubigan 24)">NSIC Rc 300 (Tubigan 24)</option>
+                                <option value="NSIC Rc 222 (Tubigan 18)">NSIC Rc 222 (Tubigan 18)</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -529,11 +567,45 @@
         </div>
     </div>
 
-</div>
+    <!-- Import Data Modal -->
+    <div class="modal fade" id="importDataModal" tabindex="-1" role="dialog" aria-labelledby="importDataModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="importDataModalLabel">Import Farmers Data</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">                <div class="alert alert-info">
+                        <h6>Instructions:</h6>
+                        <p>1. Your CSV file should have the following columns:<br>
+                           First Name, Last Name, Middle Name, Extension Name, Address, Contact Number, Crop Type, Farm Size</p>
+                        <p>2. Make sure all required fields are filled</p>
+                        <p>3. Farm Size should be in hectares</p>
+                        <p><a href="#" id="downloadTemplate" class="text-primary"><i class="fas fa-download"></i> Download CSV Template</a></p>
+                    </div>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="csvFile" accept=".csv">
+                        <label class="custom-file-label" for="csvFile">Choose file</label>
+                    </div>
+                    <div id="importPreview" class="mt-3" style="display: none;">
+                        <h6>Preview:</h6>
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead id="previewHeader"></thead>
+                                <tbody id="previewBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="confirmImportBtn" disabled>Import Data</button>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <!-- All modals here -->
-    <!-- ...existing modals... -->
 
     <!-- Core JavaScript Libraries (Must load first) -->
     <script src="/vendor/jquery/jquery.min.js"></script>
@@ -599,12 +671,24 @@
             window.location.href = "login.html"; // Redirect to login page
         });
 
-    </script>
-
-    <!-- Custom Scripts (Load last) -->
+    </script>    <!-- Custom Scripts (Load last) -->
     
     <script src="/js/custom.js"></script>
+    <script src="/js/farmers.js"></script>
     
+    <!-- Toastr for notifications -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    
+    <script>
+        // Initialize toastr
+        toastr.options = {
+            "closeButton": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "timeOut": "3000"
+        };
+    </script>
 
 </body>
 </html>

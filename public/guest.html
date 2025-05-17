@@ -7,8 +7,7 @@
     <link href="/css/sb-admin-2.css" rel="stylesheet"> <!-- Ensure correct path -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!-- FontAwesome Icons -->
     <link href="css/custom.css" rel="stylesheet"> <!-- Custom Styles -->
-    <script src="/js/main.js" defer></script>
-    <script src="js/custom.js"></script>
+   
 
 </head>
 <body id="page-top">
@@ -54,8 +53,8 @@
 
                 <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                    <!-- Logout Button -->
-                    <button id="logout-btn" class="btn btn-danger ml-auto">Logout</button>
+                    <!-- Login Button -->
+                    <button id="login-btn" class="btn btn-primary ml-auto" onclick="window.location.href='login.html'">Login</button>
                 </nav>
                 <!-- End of Topbar -->
 
@@ -70,7 +69,7 @@
                             <div class="row">
                                 <!-- Farmers Card -->
                                 <div class="col-xl-4 col-md-6 mb-4">
-                                    <div class="card border-left-primary shadow h-100 py-2" style="cursor: pointer;" onclick="window.location.href='farmers.html'">
+                                    <div class="card border-left-primary shadow h-100 py-2">
                                         <div class="card-body">
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col mr-2">
@@ -91,7 +90,7 @@
 
                                 <!-- Total Farm Size Card -->
                                 <div class="col-xl-4 col-md-6 mb-4">
-                                    <div class="card border-left-success shadow h-100 py-2" style="cursor: pointer;" onclick="window.location.href='farmers.html'">
+                                    <div class="card border-left-success shadow h-100 py-2">
                                         <div class="card-body">
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col mr-2">
@@ -112,7 +111,7 @@
 
                                 <!-- Mother Seeds Card -->
                                 <div class="col-xl-4 col-md-6 mb-4">
-                                    <div class="card border-left-info shadow h-100 py-2" style="cursor: pointer;" onclick="window.location.href='farmers.html'">
+                                    <div class="card border-left-info shadow h-100 py-2">
                                         <div class="card-body">
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col mr-2">
@@ -264,17 +263,6 @@
 
     
     <!-- Scripts -->
-    <script>
-        // Logout Button
-        document.getElementById("logout-btn").addEventListener("click", function() {
-            localStorage.removeItem("token");
-            window.location.href = "login.html"; // Redirect to login page
-        });
-
-
-        
-    </script>
-    <script src="js/custom.js"></script>
     <script src="/vendor/chart.js/Chart.min.js"></script>
     <!-- Add these scripts just before the closing </body> tag -->
     <!-- Core JavaScript -->
@@ -287,7 +275,6 @@
 
     <!-- Custom Scripts -->
     <script src="/js/sb-admin-2.min.js"></script>
-    <script src="/js/main.js"></script>
-    <script src="/js/custom.js"></script>
+    <script src="/js/guest.js"></script>
 </body>
 </html>

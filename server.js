@@ -102,7 +102,8 @@ app.post('/auth/login', async (req, res) => {
 });
 
 app.get('/api/dashboard/stats', (req, res) => {
-    const query = `
+    const { year } = req.query;
+    let query = `
         SELECT 
             COUNT(DISTINCT f.farmer_id) AS totalFarmers,
             SUM(f.farm_size) AS totalFarmSize,
@@ -110,13 +111,16 @@ app.get('/api/dashboard/stats', (req, res) => {
         FROM farmers f
         LEFT JOIN farmer_crops fc ON f.farmer_id = fc.farmer_id
     `;
-
-    db.query(query, (err, results) => {
+    const params = [];
+    if (year) {
+        query += " WHERE YEAR(fc.date_received) = ?";
+        params.push(year);
+    }
+    db.query(query, params, (err, results) => {
         if (err) {
             console.error('Database error:', err);
             return res.status(500).json({ success: false, error: 'Database error' });
         }
-
         const stats = results[0];
         res.json({
             success: true,
@@ -128,24 +132,77 @@ app.get('/api/dashboard/stats', (req, res) => {
 });
 
 // Update the crop breakdown endpoint with Tubigan names
+// List of all municipalities in Isabela
+const isabelaMunicipalities = [
+    'Alicia, Isabela',
+    'Angadanan, Isabela',
+    'Aurora, Isabela',
+    'Benito Soliven, Isabela',
+    'Burgos, Isabela',
+    'Cabagan, Isabela',
+    'Cabatuan, Isabela',
+    'City of Cauayan, Isabela',
+    'Cordon, Isabela',
+    'Delfin Albano, Isabela',
+    'Dinapigue, Isabela',
+    'Divilacan, Isabela',
+    'Echague, Isabela',
+    'Gamu, Isabela',
+    'Ilagan City, Isabela',
+    'Jones, Isabela',
+    'Luna, Isabela',
+    'Maconacon, Isabela',
+    'Mallig, Isabela',
+    'Naguilian, Isabela',
+    'Palanan, Isabela',
+    'Quezon, Isabela',
+    'Quirino, Isabela',
+    'Ramon, Isabela',
+    'Reina Mercedes, Isabela',
+    'Roxas, Isabela',
+    'San Agustin, Isabela',
+    'San Guillermo, Isabela',
+    'San Isidro, Isabela',
+    'San Manuel, Isabela',
+    'San Mariano, Isabela',
+    'San Mateo, Isabela',
+    'San Pablo, Isabela',
+    'Santa Maria, Isabela',
+    'Santiago City, Isabela',
+    'Santo Tomas, Isabela',
+    'Tumauini, Isabela'
+];
+
 app.get('/api/dashboard/crop-breakdown', (req, res) => {
+    const validCropTypes = [
+        'NSIC Rc 216 (Tubigan 17)',
+        'NSIC Rc 160',
+        'NSIC Rc 300 (Tubigan 24)',
+        'NSIC Rc 222 (Tubigan 18)'
+    ];
+
+    // Create a base result with all municipalities and crop types initialized to 0
+    const baseResults = [];
+    isabelaMunicipalities.forEach(municipality => {
+        validCropTypes.forEach(cropType => {
+            baseResults.push({
+                address: municipality,
+                crop_type: cropType,
+                count: 0
+            });
+        });
+    });
+
     const query = `
         SELECT 
             address,
             crop_type,
             COUNT(*) as count
         FROM farmers
-        WHERE crop_type IN (
-            'NSIC Rc 216 (Tubigan 17)',
-            'NSIC Rc 160',
-            'NSIC Rc 300 (Tubigan 24)',
-            'NSIC Rc 222 (Tubigan 18)'
-        )
+        WHERE crop_type IN (?)
         GROUP BY address, crop_type
         ORDER BY address, crop_type
-    `;
-
-    db.query(query, (err, results) => {
+    `;    db.query(query, [validCropTypes], (err, results) => {
         if (err) {
             console.error('Database error:', err);
             return res.status(500).json({ 
@@ -154,9 +211,21 @@ app.get('/api/dashboard/crop-breakdown', (req, res) => {
             });
         }
 
+        // Merge base results with actual data
+        const finalResults = [...baseResults];
+        results.forEach(result => {
+            const index = finalResults.findIndex(base => 
+                base.address === result.address && 
+                base.crop_type === result.crop_type
+            );
+            if (index !== -1) {
+                finalResults[index].count = result.count;
+            }
+        });
+
         res.json({
             success: true,
-            data: results
+            data: finalResults
         });
     });
 });
@@ -223,7 +292,108 @@ app.get('/api/dashboard/mother-seeds-distribution', (req, res) => {
 const farmersRoute = require("./routes/farmers");
 app.use("/api/farmers", farmersRoute);  // Make sure this line exists and uses /api/farmers
 
-// Add this after your existing endpoints
+// Import farmers from CSV
+app.post('/api/farmers/import', (req, res) => {
+    const { farmers } = req.body;
+    
+    if (!farmers || !Array.isArray(farmers) || farmers.length === 0) {
+        return res.status(400).json({ success: false, error: 'Invalid or empty data provided' });
+    }
+
+    // Begin a transaction for bulk insert
+    db.getConnection((err, connection) => {
+        if (err) {
+            console.error('Database connection error:', err);
+            return res.status(500).json({ success: false, error: 'Database connection error' });
+        }
+
+        connection.beginTransaction(err => {
+            if (err) {
+                connection.release();
+                console.error('Transaction error:', err);
+                return res.status(500).json({ success: false, error: 'Failed to begin transaction' });
+            }
+
+            let successCount = 0;
+            let failCount = 0;
+            let processedCount = 0;
+
+            // Process each farmer record
+            farmers.forEach(farmer => {
+                // Validate required fields
+                if (!farmer.first_name || !farmer.last_name || !farmer.address || !farmer.crop_type) {
+                    failCount++;
+                    processedCount++;
+                    
+                    if (processedCount === farmers.length) {
+                        finishTransaction();
+                    }
+                    return;
+                }
+
+                const query = `
+                    INSERT INTO farmers 
+                    (first_name, last_name, middle_name, extension_name, address, contact_number, crop_type, farm_size)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                `;
+
+                const params = [
+                    farmer.first_name,
+                    farmer.last_name,
+                    farmer.middle_name || '',
+                    farmer.extension_name || '',
+                    farmer.address,
+                    farmer.contact_number || '',
+                    farmer.crop_type,
+                    parseFloat(farmer.farm_size) || 0
+                ];
+
+                connection.query(query, params, (err, result) => {
+                    processedCount++;
+                    
+                    if (err) {
+                        console.error('Insert error:', err);
+                        failCount++;
+                    } else {
+                        successCount++;
+                    }
+
+                    if (processedCount === farmers.length) {
+                        finishTransaction();
+                    }
+                });
+            });
+
+            function finishTransaction() {
+                if (failCount > 0) {
+                    connection.rollback(() => {
+                        connection.release();
+                        return res.status(500).json({ 
+                            success: false, 
+                            error: `Failed to import ${failCount} records. No records were imported.` 
+                        });
+                    });
+                } else {
+                    connection.commit(err => {
+                        if (err) {
+                            connection.rollback(() => {
+                                connection.release();
+                                return res.status(500).json({ success: false, error: 'Failed to commit transaction' });
+                            });
+                        } else {
+                            connection.release();
+                            return res.json({ 
+                                success: true, 
+                                imported: successCount,
+                                message: `Successfully imported ${successCount} farmers` 
+                            });
+                        }
+                    });
+                }
+            }
+        });
+    });
+});
 
 // POST endpoint to add new crop data
 app.post('/api/crops', (req, res) => {
@@ -494,6 +664,26 @@ app.get('/api/yield-history', (req, res) => {
             years: years,
             provinces: provinceData
         });
+    });
+});
+
+// Add a new guest endpoint for dashboard data
+app.get('/api/dashboard/guest', (req, res) => {
+    const query = `
+        SELECT 
+            COUNT(DISTINCT f.farmer_id) as totalFarmers,
+            SUM(f.farm_size) as totalFarmSize,
+            COUNT(fc.id) as totalMotherSeeds
+        FROM farmers f
+        LEFT JOIN farmer_crops fc ON f.farmer_id = fc.farmer_id
+    `;
+
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Database error:', err);
+            return res.status(500).json({ error: 'Database error' });
+        }
+        res.json(results[0]);
     });
 });
 

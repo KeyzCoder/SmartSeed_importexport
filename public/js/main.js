@@ -262,12 +262,11 @@ document.addEventListener("DOMContentLoaded", function() {
             });
     }
 
-    if (document.getElementById('totalFarmers')) {
-        fetch('/api/dashboard/stats')
-            .then(response => {
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                return response.json();
-            })
+    function fetchDashboardStats(year) {
+        let url = '/api/dashboard/stats';
+        if (year) url += `?year=${year}`;
+        fetch(url)
+            .then(response => response.json())
             .then(data => {
                 document.getElementById('totalFarmers').textContent = data.totalFarmers || '0';
                 document.getElementById('totalFarmSize').textContent = `${data.totalFarmSize || '0'} hectares`;
@@ -277,6 +276,17 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.error('Error fetching data:', error);
             });
     }
+
+    // On page load
+    if (document.getElementById('totalFarmers')) {
+        fetchDashboardStats('');
+    }
+
+    // Update filter event handler
+    document.getElementById("yearFilter").addEventListener("change", function () {
+        var selectedYear = this.value;
+        fetchDashboardStats(selectedYear);
+    });
 
     // Replace the existing crop breakdown fetch code
     if (document.getElementById('cropTypeBreakdown')) {

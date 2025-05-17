@@ -1,335 +1,447 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard - Smart Seed</title>
-    <link href="/css/sb-admin-2.css" rel="stylesheet"> <!-- Ensure correct path -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!-- FontAwesome Icons -->
-    <link href="css/custom.css" rel="stylesheet"> <!-- Custom Styles -->
+    <link href="/css/sb-admin-2.css" rel="stylesheet" />
+    <!-- Ensure correct path -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <!-- FontAwesome Icons -->
+    <link href="css/custom.css" rel="stylesheet" />
+    <!-- Custom Styles -->
     <script src="/js/main.js" defer></script>
     <script src="js/custom.js"></script>
-
-</head>
-<body id="page-top">
-
+  </head>
+  <body id="page-top">
     <!-- Page Wrapper -->
     <div id="wrapper">
+      <!-- Sidebar -->
+      <ul
+        class="navbar-nav sidebar sidebar-dark accordion"
+        id="accordionSidebar"
+        style="background-color: #3cb043"
+      >
+        <!-- Sidebar - Brand -->
+        <a
+          class="sidebar-brand d-flex align-items-center justify-content-center"
+          href="index.html"
+        >
+          <img src="./img/smartseed_logo.jpg" alt="Smart Seed Logo" />
 
-        <!-- Sidebar -->
-        <ul class="navbar-nav sidebar sidebar-dark accordion" id="accordionSidebar" style="background-color: #3cb043;">
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-                <img src="./img/smartseed_logo.jpg" alt="Smart Seed Logo">
+          <div class="sidebar-brand-text mx-3">Smart Seed</div>
+        </a>
 
-                
-                <div class="sidebar-brand-text mx-3">Smart Seed</div>
-            </a>
+        <!-- Divider -->
+        <hr class="sidebar-divider my-0" />
 
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
+        <!-- Nav Item - Dashboard -->
+        <li class="nav-item active">
+          <a class="nav-link" href="dashboard.html">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
 
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item active">
-                <a class="nav-link" href="dashboard.html">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span>
-                </a>
-            </li>
+        <!-- Nav Item - Farmers -->
+        <li class="nav-item">
+          <a class="nav-link" href="farmers.html">
+            <i class="fas fa-fw fa-user"></i>
+            <span>Farmers</span>
+          </a>
+        </li>
 
-            <!-- Nav Item - Farmers -->
-            <li class="nav-item">
-                <a class="nav-link" href="farmers.html">
-                    <i class="fas fa-fw fa-user"></i>
-                    <span>Farmers</span>
-                </a>
-            </li>
+        <!-- Nav Item - Info -->
+        <li class="nav-item">
+          <a class="nav-link" href="info.html">
+            <i class="fas fa-fw fa-info-circle"></i>
+            <span>Info</span>
+          </a>
+        </li>
 
-            <!-- Nav Item - Info -->
-            <li class="nav-item">
-                <a class="nav-link" href="info.html">
-                    <i class="fas fa-fw fa-info-circle"></i>
-                    <span>Info</span>
-                </a>
-            </li>
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block" />
 
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
-
-            <!-- Sidebar Toggler -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-        </ul>
-        <!-- End of Sidebar -->
-
-        <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-
-            <!-- Main Content -->
-            <div id="content">
-
-                <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                    <!-- Logout Button -->
-                    <button id="logout-btn" class="btn btn-danger ml-auto">Logout</button>
-                </nav>
-                <!-- End of Topbar -->
-
-                <!-- Begin Page Content -->
-                <div class="container-fluid">
-                    <h1 class="h3 mb-4 text-gray-800">Dashboard</h1>
-                    
-                    <div class="dashboard-container">
-                        <!-- Main Content Area -->
-                        <div class="dashboard-main">
-                            <!-- Stats Cards Row -->
-                            <div class="row">
-                                <!-- Farmers Card -->
-                                <div class="col-xl-4 col-md-6 mb-4">
-                                    <div class="card border-left-primary shadow h-100 py-2" style="cursor: pointer;" onclick="window.location.href='farmers.html'">
-                                        <div class="card-body">
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col mr-2">
-                                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                        Total Number of Farmers
-                                                    </div>
-                                                    <div id="totalFarmers" class="h5 mb-0 font-weight-bold text-gray-800">
-                                                        Loading...
-                                                    </div>
-                                                </div>
-                                                <div class="col-auto">
-                                                    <i class="fas fa-user fa-2x text-gray-300"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Total Farm Size Card -->
-                                <div class="col-xl-4 col-md-6 mb-4">
-                                    <div class="card border-left-success shadow h-100 py-2" style="cursor: pointer;" onclick="window.location.href='farmers.html'">
-                                        <div class="card-body">
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col mr-2">
-                                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                        Total Farm Size(Hectares)
-                                                    </div>
-                                                    <div id="totalFarmSize" class="h5 mb-0 font-weight-bold text-gray-800">
-                                                        Loading...
-                                                    </div>
-                                                </div>
-                                                <div class="col-auto">
-                                                    <i class="fas fa-chart-area fa-2x text-gray-300"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Mother Seeds Card -->
-                                <div class="col-xl-4 col-md-6 mb-4">
-                                    <div class="card border-left-info shadow h-100 py-2" style="cursor: pointer;" onclick="window.location.href='farmers.html'">
-                                        <div class="card-body">
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col mr-2">
-                                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                                        Total Bags of Mother Seeds
-                                                    </div>
-                                                    <div id="motherSeeds" class="h5 mb-0 font-weight-bold text-gray-800">
-                                                        Loading...
-                                                    </div>
-                                                </div>
-                                                <div class="col-auto">
-                                                    <i class="fas fa-seedling fa-2x text-gray-300"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Mother Seeds Distribution -->
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="card shadow mb-4">
-                                        <div class="card-header py-3">
-                                            <h6 class="m-0 font-weight-bold text-primary">Mother Seeds Distribution</h6>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="chart-pie pt-4 pb-2">
-                                                <canvas id="motherSeedsPieChart"></canvas>
-                                            </div>
-                                            <div class="mt-4 text-center small">
-                                                <span class="mr-2">
-                                                    <i class="fas fa-circle text-rc216"></i> NSIC Rc 216 (Tubigan 17)
-                                                </span>
-                                                <span class="mr-2">
-                                                    <i class="fas fa-circle text-rc160"></i> NSIC Rc 160
-                                                </span>
-                                                <span class="mr-2">
-                                                    <i class="fas fa-circle text-rc300"></i> NSIC Rc 300 (Tubigan 24)
-                                                </span>
-                                                <span class="mr-2">
-                                                    <i class="fas fa-circle text-rc222"></i> NSIC Rc 222 (Tubigan 18)
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            
-
-                            <!-- Yield History in Region 2 -->
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="card shadow mb-4">
-                                        <div class="card-header py-3">
-                                            <h6 class="m-0 font-weight-bold text-primary">Yield History in Region 2</h6>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="chart-area">
-                                                <canvas id="yieldHistoryChart"></canvas>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Total Palay Production in Region 2 -->
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="card shadow mb-4">
-                                        <div class="card-header py-3">
-                                            <h6 class="m-0 font-weight-bold text-primary">Total Palay Production in Region 2</h6>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="chart-area">
-                                                <canvas id="totalProductionChart"></canvas>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        
-                        
-
-                        <!-- Yield Calculator -->
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card shadow mb-4">
-                                    <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                                        <h6 class="m-0 font-weight-bold text-primary">Yield Calculator</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <form id="yieldCalculatorForm">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="cropVariety">Rice Variety</label>
-                                                        <select class="form-control" id="cropVariety" required>
-                                                            <option value="">Select Variety</option>
-                                                            <option value="rc216">NSIC Rc 216 (Tubigan 17)</option>
-                                                            <option value="rc160">NSIC Rc 160</option>
-                                                            <option value="rc300">NSIC Rc 300 (Tubigan 24)</option>
-                                                            <option value="rc222">NSIC Rc 222 (Tubigan 18)</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="farmingMethod">Farming Method</label>
-                                                        <select class="form-control" id="farmingMethod" required>
-                                                            <option value="">Select Method</option>
-                                                            <option value="irrigated">Irrigated</option>
-                                                            <option value="rainfed">Rainfed</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="landArea">Land Area (hectares)</label>
-                                                        <input type="number" class="form-control" id="landArea" step="0.01" min="0" required>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label for="plantingMethod">Planting Method</label>
-                                                        <select class="form-control" id="plantingMethod">
-                                                            <option value="transplanted">Transplanted</option>
-                                                            <option value="direct">Direct Seeded</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Calculate Yield</button>
-                                        </form>
-                                        <div class="mt-4" id="yieldResult" style="display: none;">
-                                            <div class="alert alert-info">
-                                                <h6 class="font-weight-bold mb-2">Estimated Yield:</h6>
-                                                <p class="mb-0" id="yieldEstimate"></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-
-
-
-                        <!-- Right Sidebar -->
-                        <div class="dashboard-sidebar">
-                            <div class="card shadow h-100">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-success">Farmer Crop Holdings per Municipality</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div id="cropTypeBreakdown" class="list-group">
-                                        <!-- Items will be inserted here by JavaScript -->
-                                        <div class="text-center py-3">
-                                            <div class="spinner-border text-success" role="status">
-                                                <span class="sr-only">Loading...</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                
-
-                
-                <!-- End of Main Content -->
-                <!-- /.container-fluid -->
-
-            </div>
-            <!-- End of Main Content -->
-
+        <!-- Sidebar Toggler -->
+        <div class="text-center d-none d-md-inline">
+          <button class="rounded-circle border-0" id="sidebarToggle"></button>
         </div>
-        <!-- End of Content Wrapper -->
+      </ul>
+      <!-- End of Sidebar -->
 
+      <!-- Content Wrapper -->
+      <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+          <!-- Topbar -->
+          <nav
+            class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+          >
+            <!-- Logout Button -->
+            <button id="logout-btn" class="btn btn-danger ml-auto">
+              Logout
+            </button>
+          </nav>
+          <!-- End of Topbar -->
+
+          <!-- Inline Year Filter below the Logout Button and Dashboard Title -->
+          <div class="container-fluid">
+            <h1 class="h3 mb-4 text-gray-800 d-flex align-items-center justify-content-between">
+              Dashboard
+              <form class="form-inline" style="margin-left: 1rem;" onsubmit="return false;">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text bg-success text-white" style="font-weight:600;">
+                      <i class="fas fa-calendar-alt mr-1"></i> Year
+                    </span>
+                  </div>
+                  <select id="yearFilter" class="form-control" style="width:auto; max-width:150px;">
+                    <option value="">All Years</option>
+                    <option value="2025">2025</option>
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                    <!-- Add more years as needed -->
+                  </select>
+                </div>
+              </form>
+            </h1>
+
+            <div class="dashboard-container">
+              <!-- Main Content Area -->
+              <div class="dashboard-main">
+                <!-- Stats Cards Row -->
+                <div class="row">
+                  <!-- Farmers Card -->
+                  <div class="col-xl-4 col-md-6 mb-4">
+                    <div
+                      class="card border-left-primary shadow h-100 py-2"
+                      style="cursor: pointer"
+                      onclick="window.location.href='farmers.html'"
+                    >
+                      <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                          <div class="col mr-2">
+                            <div
+                              class="text-xs font-weight-bold text-primary text-uppercase mb-1"
+                            >
+                              Total Number of Farmers
+                            </div>
+                            <div
+                              id="totalFarmers"
+                              class="h5 mb-0 font-weight-bold text-gray-800"
+                            >
+                              Loading...
+                            </div>
+                          </div>
+                          <div class="col-auto">
+                            <i class="fas fa-user fa-2x text-gray-300"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Total Farm Size Card -->
+                  <div class="col-xl-4 col-md-6 mb-4">
+                    <div
+                      class="card border-left-success shadow h-100 py-2"
+                      style="cursor: pointer"
+                      onclick="window.location.href='farmers.html'"
+                    >
+                      <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                          <div class="col mr-2">
+                            <div
+                              class="text-xs font-weight-bold text-success text-uppercase mb-1"
+                            >
+                              Total Farm Size(Hectares)
+                            </div>
+                            <div
+                              id="totalFarmSize"
+                              class="h5 mb-0 font-weight-bold text-gray-800"
+                            >
+                              Loading...
+                            </div>
+                          </div>
+                          <div class="col-auto">
+                            <i
+                              class="fas fa-chart-area fa-2x text-gray-300"
+                            ></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Mother Seeds Card -->
+                  <div class="col-xl-4 col-md-6 mb-4">
+                    <div
+                      class="card border-left-info shadow h-100 py-2"
+                      style="cursor: pointer"
+                      onclick="window.location.href='farmers.html'"
+                    >
+                      <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                          <div class="col mr-2">
+                            <div
+                              class="text-xs font-weight-bold text-info text-uppercase mb-1"
+                            >
+                              Total Bags of Mother Seeds
+                            </div>
+                            <div
+                              id="motherSeeds"
+                              class="h5 mb-0 font-weight-bold text-gray-800"
+                            >
+                              Loading...
+                            </div>
+                          </div>
+                          <div class="col-auto">
+                            <i class="fas fa-seedling fa-2x text-gray-300"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Mother Seeds Distribution -->
+                <div class="row">
+                  <div class="col-12">
+                    <div class="card shadow mb-4">
+                      <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                          Mother Seeds Distribution
+                        </h6>
+                      </div>
+                      <div class="card-body">
+                        <div class="chart-pie pt-4 pb-2">
+                          <canvas id="motherSeedsPieChart"></canvas>
+                        </div>
+                        <div class="mt-4 text-center small">
+                          <span class="mr-2">
+                            <i class="fas fa-circle text-rc216"></i> NSIC Rc 216
+                            (Tubigan 17)
+                          </span>
+                          <span class="mr-2">
+                            <i class="fas fa-circle text-rc160"></i> NSIC Rc 160
+                          </span>
+                          <span class="mr-2">
+                            <i class="fas fa-circle text-rc300"></i> NSIC Rc 300
+                            (Tubigan 24)
+                          </span>
+                          <span class="mr-2">
+                            <i class="fas fa-circle text-rc222"></i> NSIC Rc 222
+                            (Tubigan 18)
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                
+
+                <!-- Yield History in Region 2 -->
+                <div class="row">
+                  <div class="col-12">
+                    <div class="card shadow mb-4">
+                      <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                          Yield History in Region 2
+                        </h6>
+                      </div>
+                      <div class="card-body">
+                        <div class="chart-area">
+                          <canvas id="yieldHistoryChart"></canvas>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Total Palay Production in Region 2 With Moving Average -->
+                <div class="row">
+                  <div class="col-12">
+                    <div class="card shadow mb-4">
+                      <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                          Total Palay Production in Region 2
+                        </h6>
+                      </div>
+                      <div class="card-body">
+                        <div class="chart-area">
+                          <canvas id="totalProductionChart"></canvas>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Yield Calculator -->
+                <div class="row">
+                  <div class="col-12">
+                    <div class="card shadow mb-4">
+                      <div
+                        class="card-header py-3 d-flex justify-content-between align-items-center"
+                      >
+                        <h6 class="m-0 font-weight-bold text-primary">
+                          Yield Calculator
+                        </h6>
+                      </div>
+                      <div class="card-body">
+                        <form id="yieldCalculatorForm">
+                          <div class="row">
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="cropVariety">Rice Variety</label>
+                                <select
+                                  class="form-control"
+                                  id="cropVariety"
+                                  required
+                                >
+                                  <option value="">Select Variety</option>
+                                  <option value="rc216">
+                                    NSIC Rc 216 (Tubigan 17)
+                                  </option>
+                                  <option value="rc160">NSIC Rc 160</option>
+                                  <option value="rc300">
+                                    NSIC Rc 300 (Tubigan 24)
+                                  </option>
+                                  <option value="rc222">
+                                    NSIC Rc 222 (Tubigan 18)
+                                  </option>
+                                </select>
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="farmingMethod"
+                                  >Farming Method</label
+                                >
+                                <select
+                                  class="form-control"
+                                  id="farmingMethod"
+                                  required
+                                >
+                                  <option value="">Select Method</option>
+                                  <option value="irrigated">Irrigated</option>
+                                  <option value="rainfed">Rainfed</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="landArea"
+                                  >Land Area (hectares)</label
+                                >
+                                <input
+                                  type="number"
+                                  class="form-control"
+                                  id="landArea"
+                                  step="0.01"
+                                  min="0"
+                                  required
+                                />
+                              </div>
+                            </div>
+                            <div class="col-md-6">
+                              <div class="form-group">
+                                <label for="plantingMethod"
+                                  >Planting Method</label
+                                >
+                                <select
+                                  class="form-control"
+                                  id="plantingMethod"
+                                >
+                                  <option value="transplanted">
+                                    Transplanted
+                                  </option>
+                                  <option value="direct">Direct Seeded</option>
+                                </select>
+                              </div>
+                            </div>
+                          </div>
+                          <button type="submit" class="btn btn-primary">
+                            Calculate Yield
+                          </button>
+                        </form>
+                        <div
+                          class="mt-4"
+                          id="yieldResult"
+                          style="display: none"
+                        >
+                          <div class="alert alert-info">
+                            <h6 class="font-weight-bold mb-2">
+                              Estimated Yield:
+                            </h6>
+                            <p class="mb-0" id="yieldEstimate"></p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Sidebar -->
+              <div class="dashboard-sidebar">
+                <div class="card shadow h-100">
+                  <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-success">
+                      Farmer Crop Holdings per Municipality
+                    </h6>
+                  </div>
+                  <div class="card-body">
+                    <div id="cropTypeBreakdown" class="list-group">
+                      <!-- Items will be inserted here by JavaScript -->
+                      <div class="text-center py-3">
+                        <div class="spinner-border text-success" role="status">
+                          <span class="sr-only">Loading...</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- End of Main Content -->
+          <!-- /.container-fluid -->
+        </div>
+        <!-- End of Main Content -->
+      </div>
+      <!-- End of Content Wrapper -->
     </div>
     <!-- End of Page Wrapper -->
 
-    
     <!-- Scripts -->
     <script>
-        // Logout Button
-        document.getElementById("logout-btn").addEventListener("click", function() {
-            localStorage.removeItem("token");
-            window.location.href = "login.html"; // Redirect to login page
+      // Logout Button
+      document
+        .getElementById("logout-btn")
+        .addEventListener("click", function () {
+          localStorage.removeItem("token");
+          window.location.href = "login.html"; // Redirect to login page
         });
 
-
-        
+      // Auto-filter when year is changed
+      document.getElementById("yearFilter").addEventListener("change", function () {
+        var selectedYear = this.value;
+        // Call your dashboard filtering logic here
+        if (typeof filterDashboardDataByYear === "function") {
+          filterDashboardDataByYear(selectedYear);
+        } else {
+          // fallback: show alert if function not implemented
+          alert("Filter data for year: " + (selectedYear || "All Years"));
+        }
+      });
     </script>
     <script src="js/custom.js"></script>
     <script src="/vendor/chart.js/Chart.min.js"></script>
@@ -338,7 +450,12 @@
     <script src="/vendor/jquery/jquery.min.js"></script>
     <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="/vendor/chart.js/Chart.min.js"></script>
+    <script src="js/custom.js"></script>
     <!-- Chart.js -->
     <script src="/vendor/chart.js/Chart.min.js"></script>
 
@@ -346,5 +463,5 @@
     <script src="/js/sb-admin-2.min.js"></script>
     <script src="/js/main.js"></script>
     <script src="/js/custom.js"></script>
-</body>
+  </body>
 </html>
